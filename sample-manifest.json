@@ -1,0 +1,24 @@
+{
+  "_schema": "iam-evidence-sealer/v1.0",
+  "_note": "Exemple de manifeste — Données fictives à des fins de démonstration",
+  "RunId": "A3F8C2D1",
+  "Client": "Banque Exemple SA",
+  "Author": "Arnaud Montcho",
+  "Date": "2026-03-26 14:32:15",
+  "Script": "audit-accounts.ps1",
+  "Report": "Rapport_Audit_AD_2026-03-26_143215.csv",
+  "SHA256": "a3f2b8c9d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1",
+  "ProofLevel": "L3_TIMESTAMPED",
+  "Signed": true,
+  "SignatureStatus": "SIGNED",
+  "Timestamped": true,
+  "TimestampStatus": "TIMESTAMPED_OPENSSL",
+  "TsaUrl": "https://freetsa.org/tsr",
+  "RegulatoryMapping": {
+    "DORA_Art9": "SHA-256 integrity",
+    "FINMA_2023_1_S38": "Execution log + manifest",
+    "CSSF_22806_Ctrl7": "X.509 signature — COVERED",
+    "ISO27001_A816": "Execution log",
+    "RFC3161_eIDAS": "Certified timestamp — COVERED"
+  }
+}
