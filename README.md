@@ -7,15 +7,15 @@
 
 ## Pourquoi ce module existe
 
-Un rapport d'audit CSV généré par un script PowerShell peut être modifié après livraison — par accident, par erreur, ou de façon intentionnelle. Un auditeur FINMA, CSSF ou DORA qui reçoit un fichier n'a aucun moyen de savoir si ce fichier est identique à ce qui a été produit lors de l'analyse.
+Un rapport d'audit CSV généré par un script PowerShell peut être modifié après livraison - par accident, par erreur, ou de façon intentionnelle. Un auditeur FINMA, CSSF ou DORA qui reçoit un fichier n'a aucun moyen de savoir si ce fichier est identique à ce qui a été produit lors de l'analyse.
 
 `iam-evidence-sealer` résout ce problème en trois niveaux de preuve progressifs :
 
 | Niveau | Technologie | Garantit | Usage recommandé |
 |--------|-------------|----------|------------------|
-| **L1** | Hash SHA-256 | Intégrité — le fichier n'a pas changé | Tous les livrables |
-| **L2** | Signature X.509 Authenticode | Authenticité — identifie le signataire | Rapports clients, clôture de mission |
-| **L3** | Horodatage RFC 3161 | Antériorité — le rapport existait avant telle date | Rapports réglementaires FINMA/CSSF |
+| **L1** | Hash SHA-256 | Intégrité - le fichier n'a pas changé | Tous les livrables |
+| **L2** | Signature X.509 Authenticode | Authenticité - identifie le signataire | Rapports clients, clôture de mission |
+| **L3** | Horodatage RFC 3161 | Antériorité - le rapport existait avant telle date | Rapports réglementaires FINMA/CSSF |
 
 ---
 
@@ -37,13 +37,13 @@ cd iam-evidence-sealer
 
 ## Démarrage rapide
 
-### Étape 0 — Créer un certificat de test (première fois uniquement)
+### Étape 0 - Créer un certificat de test (première fois uniquement)
 
 ```powershell
 .\New-SelfSignedCert.ps1
 ```
 
-### Étape 1 — Valider sans exécuter (DryRun)
+### Étape 1 - Valider sans exécuter (DryRun)
 
 ```powershell
 .\Invoke-SecureAudit.ps1 `
@@ -53,20 +53,20 @@ cd iam-evidence-sealer
     -DryRun
 ```
 
-### Étape 2 — Exécuter avec scellage complet
+### Étape 2 - Exécuter avec scellage complet
 
 ```powershell
-# Niveau L1 — Hash uniquement
+# Niveau L1 - Hash uniquement
 .\Invoke-SecureAudit.ps1 -ScriptPath ".\scripts\audit-accounts.ps1" -Client "Client A"
 
-# Niveau L2 — Hash + Signature
+# Niveau L2 - Hash + Signature
 .\Invoke-SecureAudit.ps1 -ScriptPath ".\scripts\run-audit.ps1" -Client "Client B" -Sign
 
-# Niveau L3 — Hash + Signature + Horodatage RFC 3161
+# Niveau L3 - Hash + Signature + Horodatage RFC 3161
 .\Invoke-SecureAudit.ps1 -ScriptPath ".\scripts\generate-campaign.ps1" -Client "Banque FINMA" -Sign -Timestamp
 ```
 
-### Étape 3 — Vérifier un rapport reçu
+### Étape 3 - Vérifier un rapport reçu
 
 ```powershell
 .\Verify-SealedReport.ps1 -ReportPath ".\Final_Audits\Rapport_Audit_AD_2026-03-26.csv"
@@ -105,9 +105,9 @@ Final_Audits/
   "RegulatoryMapping": {
     "DORA_Art9": "SHA-256 integrity",
     "FINMA_2023_1_S38": "Execution log + manifest",
-    "CSSF_22806_Ctrl7": "X.509 signature — COVERED",
+    "CSSF_22806_Ctrl7": "X.509 signature - COVERED",
     "ISO27001_A816": "Execution log",
-    "RFC3161_eIDAS": "Certified timestamp — COVERED"
+    "RFC3161_eIDAS": "Certified timestamp - COVERED"
   }
 }
 ```
@@ -118,28 +118,28 @@ Final_Audits/
 
 | Exigence réglementaire | Couverture | Fichier de preuve |
 |------------------------|------------|-------------------|
-| DORA Art. 9 — Intégrité des données | Hash SHA-256 | `.sha256` |
-| FINMA Circ. 2023/1 §38 — Traçabilité | Logs + manifeste | `.manifest`, `.log` |
-| CSSF 22/806 Contrôle 7 — Non-répudiation | Signature X.509 | Fichier signé in-place |
-| ISO 27001 A.8.16 — Audit trail | Journalisation | `.log` |
-| eIDAS / RFC 3161 — Horodatage certifié | Token TSA tiers | `.tsr` |
+| DORA Art. 9 - Intégrité des données | Hash SHA-256 | `.sha256` |
+| FINMA Circ. 2023/1 §38 - Traçabilité | Logs + manifeste | `.manifest`, `.log` |
+| CSSF 22/806 Contrôle 7 - Non-répudiation | Signature X.509 | Fichier signé in-place |
+| ISO 27001 A.8.16 - Audit trail | Journalisation | `.log` |
+| eIDAS / RFC 3161 - Horodatage certifié | Token TSA tiers | `.tsr` |
 
 ---
 
-## Niveaux de preuve — Guide de décision
+## Niveaux de preuve - Guide de décision
 
 ```
 ┌─────────────────────────────────────────────────────────┐
 │ Quel niveau choisir ?                                   │
 │                                                         │
 │  Mission France, audit interne, démo client ?           │
-│  → L1 (Hash SHA-256) — Suffisant                        │
+│  → L1 (Hash SHA-256) - Suffisant                        │
 │                                                         │
 │  Clôture de mission, rapport client final ?             │
 │  → L2 (+ Signature) avec certificat CA commercial      │
 │                                                         │
 │  Rapport destiné à FINMA, CSSF, ou régulateur ?        │
-│  → L3 (+ RFC 3161) — Obligatoire pour valeur probante   │
+│  → L3 (+ RFC 3161) - Obligatoire pour valeur probante   │
 │                                                         │
 │  ⚠  Certificat auto-signé = L2 technique uniquement    │
 │     Sans valeur juridique tierce reconnue              │
@@ -164,7 +164,7 @@ Aucune modification des scripts existants n'est nécessaire.
 
 ---
 
-## Sécurité — Ce qu'il ne faut JAMAIS faire
+## Sécurité - Ce qu'il ne faut JAMAIS faire
 
 - ❌ Ne committez jamais votre fichier `.pfx` (clé privée) sur GitHub
 - ❌ Ne committez jamais votre clé privée sous quelque forme que ce soit
@@ -175,15 +175,15 @@ Aucune modification des scripts existants n'est nécessaire.
 
 ## Auteur
 
-**Arnaud Montcho** — Consultant IAM/IGA Indépendant  
+**Arnaud Montcho** - Consultant IAM/IGA Indépendant  
 Spécialisation : Gouvernance des Identités & Conformité Réglementaire (FINMA · CSSF · DORA)  
 GitHub : [CrepuSkull](https://github.com/CrepuSkull)
 
 Faisant partie de l'écosystème **IAM-Lab** :
-- [iam-foundation-lab](https://github.com/CrepuSkull/iam-foundation-lab) — Audit AD → Migration Entra ID
-- [IAM-Lab-Identity-Lifecycle](https://github.com/CrepuSkull/IAM-Lab-Identity-Lifecycle) — Automatisation JML
-- [iam-governance-lab](https://github.com/CrepuSkull/iam-governance-lab) — Contrôle continu & Recertification
-- **iam-evidence-sealer** — Intégrité des preuves d'audit ← *vous êtes ici*
+- [iam-foundation-lab](https://github.com/CrepuSkull/iam-foundation-lab) - Audit AD → Migration Entra ID
+- [IAM-Lab-Identity-Lifecycle](https://github.com/CrepuSkull/IAM-Lab-Identity-Lifecycle) - Automatisation JML
+- [iam-governance-lab](https://github.com/CrepuSkull/iam-governance-lab) - Contrôle continu & Recertification
+- **iam-evidence-sealer** - Intégrité des preuves d'audit ← *vous êtes ici*
 
 ---
 
